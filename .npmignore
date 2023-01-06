@@ -1,0 +1,6 @@
+lib
+.parcel-cache
+node_modules
+.prettierrc
+.idea
+.github
