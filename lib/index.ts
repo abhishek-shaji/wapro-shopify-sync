@@ -1,12 +1,12 @@
 import * as dotenv from 'dotenv';
 import cron from 'node-cron';
-import { sleep } from '~lib/utils/sleep';
 
 import { WELCOME_ASCII_ART } from './constants/asciiArt';
 import { CRON_EXPRESSIONS } from './constants/cron';
 import { ShopifyService } from './services/ShopifyService';
 import { WaproService } from './services/WaproService';
 import { logger } from './utils/logger';
+import { sleep } from './utils/sleep';
 
 dotenv.config();
 

@@ -1,7 +1,7 @@
 {
-  "name": "middy-exception-handler",
-  "version": "1.4.4",
-  "description": "Exception handler for Middy",
+  "name": "wapro-shopify-sync",
+  "version": "0.0.0-development",
+  "description": "This library allows you to sync your inventory data from WAPRO to your Shopify store.",
   "source": "lib/index.ts",
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
