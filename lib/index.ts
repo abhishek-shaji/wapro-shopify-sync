@@ -5,6 +5,7 @@ import { WELCOME_ASCII_ART } from './constants/asciiArt';
 import { CRON_EXPRESSIONS } from './constants/cron';
 import { ShopifyService } from './services/ShopifyService';
 import { WaproService } from './services/WaproService';
+import { formatFloatToShopifyPriceString } from './utils/formatFloatToPriceString';
 import { logger } from './utils/logger';
 import { sleep } from './utils/sleep';
 
@@ -31,8 +32,7 @@ dotenv.config();
     const variantMap = await shopifyService.fetchVariantsByBarcode();
 
     for (const inventoryItem of inventoryItems) {
-      const { barcode, available, price } = inventoryItem;
-      const variant = variantMap.get(barcode);
+      const variant = variantMap.get(inventoryItem.barcode);
 
       try {
         if (
@@ -43,15 +43,15 @@ dotenv.config();
           logger.info(`Updating variant #${variant.id}...`);
 
           await shopifyService.updateInventory(variant, {
-            price,
-            available: available,
+            price: formatFloatToShopifyPriceString(inventoryItem.price),
+            available: inventoryItem.available,
           });
 
           logger.success(`Successfully updated variant #${variant.id}`);
           await sleep(1000);
         }
       } catch (e) {
-        logger.danger(`Failed to update variant #${variant.id}`);
+        logger.danger(`Failed to update variant. Barcode: ${variant.barcode}`);
       }
     }
 

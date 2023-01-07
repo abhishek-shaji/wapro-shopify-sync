@@ -75,38 +75,49 @@ class ShopifyService {
 
   async updateInventory(
     { id, inventory_item_id }: ShopifyProductVariant,
-    { price, available }: { price: number; available: number }
+    { price, available }: { price: string; available: number }
   ) {
-    logger.info(`Updating variant price for Variant #${id}...`);
     await this.updateVariantPrice(id, price);
-    logger.success(`Successfully variant price for Variant #${id}`);
-
-    logger.info(`Updating inventory level for Inventory Level #${inventory_item_id}...`);
     await this.adjustInventoryLevel(inventory_item_id, available);
-    logger.success(
-      `Successfully updated inventory level for Inventory Level #${inventory_item_id}`
-    );
   }
 
-  private async updateVariantPrice(id: number, price: number) {
-    const response = await this.axios.put(`/variants/${id}.json`, {
-      variant: {
-        id,
-        price,
-      },
-    });
+  private async updateVariantPrice(id: number, price: string) {
+    try {
+      logger.info(`Updating variant price for Variant #${id}...`);
+      const response = await this.axios.put(`/variants/${id}.json`, {
+        variant: {
+          id,
+          price,
+        },
+      });
+      logger.success(`Successfully variant price for Variant #${id}`);
 
-    return response.data;
+      return response.data;
+    } catch (e) {
+      logger.danger(`Failed to update variant price for Variant #${id}`);
+      throw new Error('Failed to update variant price');
+    }
   }
 
   private async adjustInventoryLevel(inventoryItemId: number, available: number) {
-    const response = await this.axios.post(`/inventory_levels/set.json`, {
-      inventory_item_id: inventoryItemId,
-      location_id: this.location.id,
-      available,
-    });
+    try {
+      logger.info(`Updating inventory level for Inventory Level #${inventoryItemId}...`);
 
-    return response.data;
+      const response = await this.axios.post(`/inventory_levels/set.json`, {
+        inventory_item_id: inventoryItemId,
+        location_id: this.location.id,
+        available,
+      });
+
+      logger.success(
+        `Successfully updated inventory level for Inventory Level #${inventoryItemId}`
+      );
+
+      return response.data;
+    } catch (e) {
+      logger.danger(`Failed to update inventory level for Inventory Level #${inventoryItemId}`);
+      throw new Error('Failed to update inventory level');
+    }
   }
 }
 

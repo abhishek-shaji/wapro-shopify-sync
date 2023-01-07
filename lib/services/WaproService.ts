@@ -1,6 +1,6 @@
 import * as sql from 'mssql';
+import { requireEnv } from '~lib/utils/requireEnv';
 
-import { WAPRO_CONFIG } from '../constants/config';
 import { QUERY_PRICE_AND_QUANTITY } from '../constants/query';
 import { logger } from '../utils/logger';
 
@@ -16,7 +16,22 @@ class WaproService {
   public async initializeConnection() {
     try {
       logger.info('Initializing connection to WAPRO database...');
-      this.connection = await sql.connect(WAPRO_CONFIG);
+      this.connection = await sql.connect({
+        server: requireEnv('WAPRO_DB_HOST'),
+        user: requireEnv('WAPRO_DB_USERNAME'),
+        port: 1433,
+        database: requireEnv('WAPRO_DB_NAME'),
+        password: requireEnv('WAPRO_DB_PASSWORD'),
+        pool: {
+          max: 10,
+          min: 0,
+          idleTimeoutMillis: 30000,
+        },
+        options: {
+          encrypt: true, // for azure
+          trustServerCertificate: true, // change to true for local dev / self-signed certs
+        },
+      });
       logger.info('Connection to WAPRO database successful.');
     } catch (error) {
       logger.danger('Connection to WAPRO database failed. Please check your credentials.');

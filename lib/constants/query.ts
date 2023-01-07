@@ -1,1 +1,1 @@
-export const QUERY_PRICE_AND_QUANTITY = `SELECT KOD_KRESKOWY as 'barcode', STAN as 'availableQuantity', CenaBrutto as 'price'  FROM dbo.iWP_VV_WFMAG_Cenniki LEFT JOIN ARTYKUL ON iWP_VV_WFMAG_Cenniki.id_artykulu = ARTYKUL.ID_ARTYKULU`;
+export const QUERY_PRICE_AND_QUANTITY = `SELECT KOD_KRESKOWY AS 'barcode', STAN as 'available', CA.CENA_BRUTTO as 'price' FROM dbo.ARTYKUL LEFT JOIN dbo.CENA_ARTYKULU CA ON dbo.ARTYKUL.ID_ARTYKULU = CA.ID_ARTYKULU WHERE CA.ID_CENY = 1 AND KOD_KRESKOWY != ''`;
