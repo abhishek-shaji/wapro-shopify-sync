@@ -11,11 +11,14 @@
     "clean": "rm -rf ./dist ./.parcel-cache",
     "release": "semantic-release",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "build:executable": "pkg dist/main.js --targets node14-win,node14-macos,node14-linux --output outputs/wapro-shopify-sync"
   },
   "targets": {
     "main": {
-      "optimize": true
+      "context": "node",
+      "optimize": false,
+      "includeNodeModules": true
     }
   },
   "maintainers": [
@@ -54,6 +57,7 @@
     "dotenv": "^16.0.3",
     "http-status-codes": "^2.2.0",
     "mssql": "^9.0.1",
-    "node-cron": "^3.0.2"
+    "node-cron": "^3.0.2",
+    "pkg": "^5.8.0"
   }
 }

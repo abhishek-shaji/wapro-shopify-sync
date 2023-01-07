@@ -1,6 +1,4 @@
 import axios, { AxiosInstance } from 'axios';
-import { logger } from '~lib/utils/logger';
-import { requireEnv } from '~lib/utils/requireEnv';
 
 import {
   ShopifyLocation,
@@ -8,6 +6,8 @@ import {
   ShopifyProductVariant,
   ShopifyVariantMap,
 } from '../types/shopify';
+import { logger } from '../utils/logger';
+import { requireEnv } from '../utils/requireEnv';
 
 class ShopifyService {
   private axios: AxiosInstance;
